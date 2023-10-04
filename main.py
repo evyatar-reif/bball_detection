@@ -9,7 +9,7 @@ import BallModule as bd
 def main():
     args = sys.argv[1:]
     count = 0
-    cap = cv2.VideoCapture("videos/curry.mp4")
+    cap = cv2.VideoCapture("videos/prof1.mp4")
     pTime = -1
     poseDetector = pd.poseDetector()
     ballDetector = bd.ballDetector()
@@ -22,9 +22,8 @@ def main():
         if not success:
             break
 
-        # img, landmark_list = poseDetector.findPose(img)
-        if count % 2 == 0:
-            img = ballDetector.findBall(img)
+        img, landmark_list = poseDetector.findPose(img)
+        img = ballDetector.findBall(img)
 
         # Display fps
         cTime = time.time()

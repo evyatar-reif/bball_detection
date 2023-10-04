@@ -15,14 +15,14 @@ class ballDetector:
         blurFrame = cv2.GaussianBlur(grayFrame, (17, 17), 0)
 
         circles = cv2.HoughCircles(
-            grayFrame,
+            blurFrame,
             cv2.HOUGH_GRADIENT,
             1.2,
             100,
             param1=100,
             param2=30,
-            minRadius=75,
-            maxRadius=500,
+            minRadius=25,
+            maxRadius=75,
         )
 
         if circles is not None:
