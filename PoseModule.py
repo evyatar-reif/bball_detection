@@ -17,20 +17,32 @@ class poseDetector:
         self.pose = self.mpPose.Pose(
             # self.mode, self.upBody, self.smooth, self.detectionCon, self.trackCon
         )
+        self.landmarks = []
 
     def findPose(self, img, draw=True):
-        imgRgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        results = self.pose.process(imgRgb)
-        landmark_list = []
-        if draw and results.pose_landmarks:
-            self.mpDraw.draw_landmarks(
-                img, results.pose_landmarks, self.mpPose.POSE_CONNECTIONS
-            )
-            for id, landmark in enumerate(results.pose_landmarks.landmark):
-                # draw circle in point coordinate
-                height, width, channel = img.shape
-                cx, cy = int(landmark.x * width), int(landmark.y * height)
-                cv2.circle(img, (cx, cy), 5, (255, 0, 0), cv2.FILLED)
-                landmark_list.append({"id": id, "landmark": landmark})
+        # color it in rgb
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img.flags.writeable = False
 
-        return img, landmark_list
+        # look for landmarks
+        results = self.pose.process(img)
+
+        # recolor to bgr
+        img.flags.writeable = True
+        img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+
+        try:
+            self.landmarks = results.pose_landmarks.landmark
+        except:
+            pass
+
+        # draw circles and connectors
+        self.mpDraw.draw_landmarks(
+            img,
+            results.pose_landmarks,
+            self.mpPose.POSE_CONNECTIONS,
+            self.mpDraw.DrawingSpec(color=(245, 117, 66), thickness=2, circle_radius=5),
+            self.mpDraw.DrawingSpec(color=(245, 66, 230), thickness=2, circle_radius=5),
+        )
+
+        return img
