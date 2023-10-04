@@ -30,6 +30,7 @@ class poseDetector:
                 # draw circle in point coordinate
                 height, width, channel = img.shape
                 cx, cy = int(landmark.x * width), int(landmark.y * height)
-                landmark_list.append([id, cx, cy])
                 cv2.circle(img, (cx, cy), 5, (255, 0, 0), cv2.FILLED)
+                landmark_list.append({"id": id, "landmark": landmark})
+
         return img, landmark_list

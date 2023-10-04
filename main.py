@@ -24,7 +24,7 @@ def main():
 
         img, landmark_list = poseDetector.findPose(img)
         img = ballDetector.findBall(img)
-
+        print(landmark_list)
         # Display fps
         cTime = time.time()
         fps = 1 / (cTime - pTime + 0.01)
