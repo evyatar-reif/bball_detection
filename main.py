@@ -4,13 +4,16 @@ import time
 import sys
 import PoseModule as pd
 import BallModule as bd
+import matplotlib.pyplot as plt
+import numpy as np
 
-FILE_NAME = "videos/dribble.mp4"
+
+FILE_NAME = "videos/dribble4.mp4"
 
 
 def main():
-    cap = cv2.VideoCapture(FILE_NAME)
     pTime = 0
+    cap = cv2.VideoCapture(FILE_NAME)
     poseDetector = pd.poseDetector()
     ballDetector = bd.ballDetector()
 
@@ -21,7 +24,7 @@ def main():
         ) = cap.read()
         if not success:
             break
-        print(pTime)
+
         img = poseDetector.findPose(img)
         img = ballDetector.findBall(img)
 
@@ -33,6 +36,13 @@ def main():
             break
 
     cv2.destroyAllWindows()
+
+
+def plot_graph(y, x=None):
+    ypoints = y
+    xpoints = [i for i in range(len(y))]
+    plt.plot(xpoints, ypoints)
+    plt.show()
 
 
 def scale(img):
@@ -50,11 +60,9 @@ def scale(img):
 
 def display_fps(img, pTime):
     cTime = time.time()
+
     fps = 1 / (cTime - pTime)
     pTime = time.time()
-
-    print(cTime, pTime)
-
     cv2.putText(
         img,
         str(int(fps)),
